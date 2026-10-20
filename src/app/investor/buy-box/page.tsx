@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { propertyTypeOptions, conditionOptions } from "@/lib/validation";
+import { propertyTypeOptions, conditionOptions, featureOptionGroups } from "@/lib/validation";
 
 type Market = { label: string; city: string; county: string; state: string; zip: string };
 type BuyBox = {
@@ -31,6 +31,9 @@ export default function BuyBoxPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [minBedrooms, setMinBedrooms] = useState("");
+  const [minGarageSpaces, setMinGarageSpaces] = useState("");
+  const [requiresPool, setRequiresPool] = useState(false);
+  const [desiredFeatures, setDesiredFeatures] = useState<string[]>([]);
 
   async function load() {
     const res = await fetch("/api/buy-box");
@@ -50,6 +53,9 @@ export default function BuyBoxPage() {
   }
   function toggleCondition(v: string) {
     setConditions((c) => (c.includes(v) ? c.filter((x) => x !== v) : [...c, v]));
+  }
+  function toggleFeature(v: string) {
+    setDesiredFeatures((f) => (f.includes(v) ? f.filter((x) => x !== v) : [...f, v]));
   }
   function updateMarket(i: number, patch: Partial<Market>) {
     setMarkets((ms) => ms.map((m, idx) => (idx === i ? { ...m, ...patch } : m)));
@@ -72,6 +78,9 @@ export default function BuyBoxPage() {
           minPrice: minPrice || undefined,
           maxPrice: maxPrice || undefined,
           minBedrooms: minBedrooms || undefined,
+          minGarageSpaces: minGarageSpaces || undefined,
+          requiresPool,
+          desiredFeatures,
         }),
       });
       const data = await res.json();
@@ -79,6 +88,9 @@ export default function BuyBoxPage() {
       setShowForm(false);
       setName("");
       setMarkets([{ ...emptyMarket }]);
+      setMinGarageSpaces("");
+      setRequiresPool(false);
+      setDesiredFeatures([]);
       load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save");
@@ -198,6 +210,48 @@ export default function BuyBoxPage() {
               <span className="mb-1.5 block text-sm font-medium text-ink-700">Min Bedrooms</span>
               <input value={minBedrooms} onChange={(e) => setMinBedrooms(e.target.value)} type="number" className="w-full rounded-lg border border-ink-200 px-3 py-2 text-sm" />
             </label>
+            <label className="block">
+              <span className="mb-1.5 block text-sm font-medium text-ink-700">Min Garage Spaces</span>
+              <input value={minGarageSpaces} onChange={(e) => setMinGarageSpaces(e.target.value)} type="number" className="w-full rounded-lg border border-ink-200 px-3 py-2 text-sm" />
+            </label>
+            <label className="flex items-end pb-2.5">
+              <button
+                type="button"
+                onClick={() => setRequiresPool((v) => !v)}
+                className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold ${
+                  requiresPool ? "border-brand-600 bg-brand-50 text-brand-700" : "border-ink-200 text-ink-500"
+                }`}
+              >
+                🏊 Must have a pool
+              </button>
+            </label>
+          </div>
+
+          <div className="mt-5">
+            <span className="mb-2 block text-sm font-medium text-ink-700">Preferred Features (boosts match score)</span>
+            <div className="space-y-3">
+              {featureOptionGroups.map((group) => (
+                <div key={group.group}>
+                  <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-400">{group.group}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {group.options.map((o) => (
+                      <button
+                        key={o.value}
+                        type="button"
+                        onClick={() => toggleFeature(o.value)}
+                        className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                          desiredFeatures.includes(o.value)
+                            ? "border-brand-600 bg-brand-50 text-brand-700"
+                            : "border-ink-200 text-ink-500"
+                        }`}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {error && <div className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700">{error}</div>}

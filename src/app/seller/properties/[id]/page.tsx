@@ -145,6 +145,11 @@ export default async function SellerPropertyDetail({ params }: { params: Promise
                 Our team is reviewing your submission and will have an offer ready shortly.
               </p>
             )}
+            {property.offerPrice && (
+              <Link href="/compare" className="mt-3 inline-block text-xs font-semibold text-cash-700 underline">
+                See how this compares to listing traditionally →
+              </Link>
+            )}
           </div>
 
           <div className="rounded-2xl border border-ink-100 bg-white p-6 text-sm">

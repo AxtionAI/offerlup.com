@@ -77,6 +77,50 @@ export const challengeOptions = [
   { value: "LIFE_TRANSITION", label: "Life transition" },
 ] as const;
 
+/**
+ * Amenity tags sellers can select on their property and investors can prefer
+ * in their Smart Buy Box (as a soft match-score bonus, not a hard filter —
+ * see scoreMatch in matching.ts). Grouped for a friendlier picker UI.
+ */
+export const featureOptionGroups = [
+  {
+    group: "Comfort",
+    options: [
+      { value: "CENTRAL_AC", label: "Central A/C" },
+      { value: "FIREPLACE", label: "Fireplace" },
+      { value: "BASEMENT", label: "Basement" },
+      { value: "SOLAR_PANELS", label: "Solar panels" },
+    ],
+  },
+  {
+    group: "Updates",
+    options: [
+      { value: "UPDATED_KITCHEN", label: "Updated kitchen" },
+      { value: "UPDATED_BATHROOMS", label: "Updated bathrooms" },
+      { value: "NEW_ROOF", label: "New roof" },
+      { value: "NEW_FLOORING", label: "New flooring" },
+    ],
+  },
+  {
+    group: "Lot & Parking",
+    options: [
+      { value: "FENCED_YARD", label: "Fenced yard" },
+      { value: "RV_BOAT_PARKING", label: "RV / boat parking" },
+      { value: "CORNER_LOT", label: "Corner lot" },
+      { value: "WATERFRONT", label: "Waterfront" },
+    ],
+  },
+  {
+    group: "Other",
+    options: [
+      { value: "MOTHER_IN_LAW_SUITE", label: "In-law suite / ADU" },
+      { value: "GATED_COMMUNITY", label: "Gated community" },
+    ],
+  },
+] as const;
+
+export const featureOptions: { value: string; label: string }[] = featureOptionGroups.flatMap((g) => [...g.options]);
+
 export const sellerSubmissionSchema = z.object({
   fullName: z.string().min(2, "Enter your full name"),
   email: z.string().email("Enter a valid email"),
@@ -108,6 +152,13 @@ export const sellerSubmissionSchema = z.object({
   bathrooms: z.coerce.number().min(0).max(20),
   squareFeet: z.coerce.number().int().min(100).max(50000),
   yearBuilt: optionalNumber(),
+  lotSizeSqft: optionalNumber(),
+  stories: optionalNumber(),
+  garageSpaces: optionalNumber(),
+  hasPool: z.boolean().optional().default(false),
+  hasHoa: z.boolean().optional().default(false),
+  hoaFeeMonthly: optionalNumber(),
+  features: z.array(z.string()).optional().default([]),
 
   zillowEstimate: z.coerce.number().min(1, "Enter an estimated market value"),
 
@@ -155,6 +206,9 @@ export const buyBoxSchema = z.object({
   minPrice: optionalNumber(),
   maxPrice: optionalNumber(),
   minYearBuilt: optionalNumber(),
+  minGarageSpaces: optionalNumber(),
+  requiresPool: z.boolean().optional().default(false),
+  desiredFeatures: z.array(z.string()).optional().default([]),
 });
 
 export const proofOfFundsSchema = z.object({

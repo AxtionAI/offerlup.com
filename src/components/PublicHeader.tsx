@@ -30,6 +30,9 @@ export async function PublicHeader() {
           <Link href="/investors" className="hover:text-ink-900">
             For Investors
           </Link>
+          <Link href="/compare" className="hover:text-ink-900">
+            Cash vs. Retail
+          </Link>
           <Link href="/#how-it-works" className="hover:text-ink-900">
             How It Works
           </Link>

@@ -42,6 +42,9 @@ export async function POST(req: NextRequest) {
       minPrice: data.minPrice,
       maxPrice: data.maxPrice,
       minYearBuilt: data.minYearBuilt,
+      minGarageSpaces: data.minGarageSpaces,
+      requiresPool: data.requiresPool ?? false,
+      desiredFeatures: JSON.stringify(data.desiredFeatures ?? []),
       markets: {
         create: data.markets.map((m) => ({
           label: m.label,

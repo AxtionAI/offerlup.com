@@ -44,6 +44,17 @@ export function scoreMatch(buyBox: BuyBoxWithMarkets, property: Property): numbe
   const sqftMaxOk = buyBox.maxSquareFeet == null || property.squareFeet <= buyBox.maxSquareFeet;
   if (bedOk && bathOk && sqftMinOk && sqftMaxOk) score += 10;
 
+  // Amenity fit: pool/garage are near-hard requirements when set, desired
+  // features are a soft bonus for partial overlap rather than all-or-nothing.
+  maxScore += 10;
+  const poolOk = !buyBox.requiresPool || property.hasPool;
+  const garageOk = buyBox.minGarageSpaces == null || (property.garageSpaces ?? 0) >= buyBox.minGarageSpaces;
+  const desired: string[] = JSON.parse(buyBox.desiredFeatures || "[]");
+  const propertyFeatures: string[] = JSON.parse(property.features || "[]");
+  const featureRatio =
+    desired.length === 0 ? 1 : desired.filter((f) => propertyFeatures.includes(f)).length / desired.length;
+  if (poolOk && garageOk) score += 5 + 5 * featureRatio;
+
   return Math.round((score / maxScore) * 100);
 }
 

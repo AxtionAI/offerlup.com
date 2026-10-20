@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { propertyTypeOptions, conditionTiers, challengeOptions } from "@/lib/validation";
+import { propertyTypeOptions, conditionTiers, challengeOptions, featureOptionGroups } from "@/lib/validation";
 import { estimateOfferRange, formatCurrency } from "@/lib/offer";
 import { WizardStepper } from "@/components/WizardStepper";
 import { ConditionPicker } from "@/components/ConditionPicker";
@@ -22,6 +22,13 @@ type FormState = {
   bathrooms: string;
   squareFeet: string;
   yearBuilt: string;
+  lotSizeSqft: string;
+  stories: string;
+  garageSpaces: string;
+  hasPool: boolean;
+  hasHoa: boolean;
+  hoaFeeMonthly: string;
+  features: string[];
   zillowEstimate: string;
   askingPrice: string;
   occupancy: string;
@@ -47,6 +54,13 @@ const initialState: FormState = {
   bathrooms: "2",
   squareFeet: "1500",
   yearBuilt: "",
+  lotSizeSqft: "",
+  stories: "1",
+  garageSpaces: "",
+  hasPool: false,
+  hasHoa: false,
+  hoaFeeMonthly: "",
+  features: [],
   zillowEstimate: "",
   askingPrice: "",
   occupancy: "Owner occupied",
@@ -79,6 +93,12 @@ export default function SellPage() {
     setForm((f) => ({
       ...f,
       challenges: f.challenges.includes(v) ? f.challenges.filter((c) => c !== v) : [...f.challenges, v],
+    }));
+
+  const toggleFeature = (v: string) =>
+    setForm((f) => ({
+      ...f,
+      features: f.features.includes(v) ? f.features.filter((c) => c !== v) : [...f.features, v],
     }));
 
   const offerRange = useMemo(() => {
@@ -250,6 +270,68 @@ export default function SellPage() {
                 </Field>
                 <Field label="Bedrooms">{stepper(form.bedrooms, (v) => update({ bedrooms: v }))}</Field>
                 <Field label="Bathrooms">{stepper(form.bathrooms, (v) => update({ bathrooms: v }), 0, 20, 0.5)}</Field>
+                <Field label="Stories">{stepper(form.stories, (v) => update({ stories: v }), 1, 5)}</Field>
+                <Field label="Garage Spaces">{stepper(form.garageSpaces || "0", (v) => update({ garageSpaces: v }), 0, 6)}</Field>
+                <Field label="Lot Size (sqft, optional)">
+                  <input type="number" className={inputCls} value={form.lotSizeSqft} onChange={(e) => update({ lotSizeSqft: e.target.value })} />
+                </Field>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => update({ hasPool: !form.hasPool })}
+                  className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold ${
+                    form.hasPool ? "border-brand-600 bg-brand-50 text-brand-700" : "border-ink-200 text-ink-500"
+                  }`}
+                >
+                  🏊 Has a pool
+                </button>
+                <button
+                  type="button"
+                  onClick={() => update({ hasHoa: !form.hasHoa })}
+                  className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold ${
+                    form.hasHoa ? "border-brand-600 bg-brand-50 text-brand-700" : "border-ink-200 text-ink-500"
+                  }`}
+                >
+                  🏘️ Part of an HOA
+                </button>
+                {form.hasHoa && (
+                  <input
+                    type="number"
+                    className={`${inputCls} w-40`}
+                    placeholder="Monthly HOA fee"
+                    value={form.hoaFeeMonthly}
+                    onChange={(e) => update({ hoaFeeMonthly: e.target.value })}
+                  />
+                )}
+              </div>
+
+              <div className="mt-6">
+                <span className="mb-2 block text-sm font-medium text-ink-700">Property features (optional)</span>
+                <div className="space-y-3">
+                  {featureOptionGroups.map((group) => (
+                    <div key={group.group}>
+                      <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-400">{group.group}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {group.options.map((o) => (
+                          <button
+                            key={o.value}
+                            type="button"
+                            onClick={() => toggleFeature(o.value)}
+                            className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                              form.features.includes(o.value)
+                                ? "border-brand-600 bg-brand-50 text-brand-700"
+                                : "border-ink-200 text-ink-500"
+                            }`}
+                          >
+                            {o.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
           )}
@@ -385,6 +467,19 @@ export default function SellPage() {
                 <Row label="Address" value={`${form.addressLine1}, ${form.city}, ${form.state} ${form.zip}`} />
                 <Row label="Type / Condition" value={`${form.propertyType.replace("_", " ")} · ${conditionTiers.find((t) => t.value === form.condition)?.title ?? form.condition}`} />
                 <Row label="Beds / Baths / Sqft" value={`${form.bedrooms} bd · ${form.bathrooms} ba · ${form.squareFeet} sqft`} />
+                <Row
+                  label="Features"
+                  value={
+                    [
+                      form.hasPool && "Pool",
+                      form.hasHoa && "HOA",
+                      form.garageSpaces && `${form.garageSpaces}-car garage`,
+                      form.features.length > 0 && `${form.features.length} amenities`,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ") || "None listed"
+                  }
+                />
                 <Row label="Estimated Offer Range" value={offerRange ? `${formatCurrency(offerRange.low)} – ${formatCurrency(offerRange.high)}` : "—"} />
                 <Row label="Photos" value={`${photos.length} uploaded`} />
               </dl>

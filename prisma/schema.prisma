@@ -97,6 +97,12 @@ model Property {
   squareFeet         Int
   lotSizeSqft       Int?
   yearBuilt         Int?
+  stories           Int?
+  garageSpaces      Int?
+  hasPool           Boolean            @default(false)
+  hasHoa            Boolean            @default(false)
+  hoaFeeMonthly     Float?
+  features          String             @default("[]")
 
   zillowEstimate    Float
   afterRepairValue  Float?
@@ -158,6 +164,9 @@ model BuyBox {
   minPrice          Float?
   maxPrice          Float?
   minYearBuilt      Int?
+  minGarageSpaces   Int?
+  requiresPool      Boolean  @default(false)
+  desiredFeatures   String   @default("[]")
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
