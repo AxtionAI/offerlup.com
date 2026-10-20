@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/PublicHeader";
 import { PublicFooter } from "@/components/PublicFooter";
+import { PropertyShowcase } from "@/components/PropertyShowcase";
+import { AuctionIllustration } from "@/components/illustrations/AuctionIllustration";
 
 const features = [
   {
@@ -31,8 +33,8 @@ export default function InvestorsPage() {
       <PublicHeader />
       <main className="flex-1">
         <section className="bg-ink-950">
-          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-8">
+            <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold text-brand-400">
                 FOR INVESTORS
               </span>
@@ -58,6 +60,7 @@ export default function InvestorsPage() {
                 </Link>
               </div>
             </div>
+            <AuctionIllustration className="hidden w-full rounded-2xl shadow-xl lg:block" />
           </div>
         </section>
 
@@ -69,6 +72,23 @@ export default function InvestorsPage() {
                 <p className="mt-2 text-sm leading-6 text-ink-600">{f.body}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="inline-flex items-center gap-2 rounded-full bg-cash-100 px-3 py-1 text-xs font-semibold text-cash-700">
+              LIVE OPPORTUNITIES
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
+              Deals in the pipeline right now
+            </h2>
+            <p className="mt-4 text-lg text-ink-600">
+              Build your Smart Buy Box and get matched to deals like these the moment they go live.
+            </p>
+          </div>
+          <div className="mt-12">
+            <PropertyShowcase limit={6} />
           </div>
         </section>
 

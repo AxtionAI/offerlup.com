@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/PublicHeader";
 import { PublicFooter } from "@/components/PublicFooter";
+import { PropertyShowcase } from "@/components/PropertyShowcase";
+import { KeyHandoverIllustration } from "@/components/illustrations/KeyHandoverIllustration";
+import { AuctionIllustration } from "@/components/illustrations/AuctionIllustration";
 
 const steps = [
   {
@@ -25,6 +28,24 @@ const trustStats = [
   { value: "$186M+", label: "In competitive offers generated" },
   { value: "11 days", label: "Average time to close" },
   { value: "0%", label: "Commission charged to sellers" },
+];
+
+const investorSteps = [
+  {
+    title: "Build your Smart Buy Box",
+    body:
+      "Set your target markets by zip, county, or city, plus property type, condition, and price range — the criteria we use to match and score deals for you.",
+  },
+  {
+    title: "Get matched deals",
+    body:
+      "Pre-vetted, pre-calculated deals land in your marketplace feed ranked by fit — no more scrolling listing sites hoping something pencils.",
+  },
+  {
+    title: "Win in a live auction",
+    body:
+      "Bid against other verified investors in a transparent, ascending auction. You only pay the 6% platform fee if you win.",
+  },
 ];
 
 export default function Home() {
@@ -142,6 +163,44 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="inline-flex items-center gap-2 rounded-full bg-cash-100 px-3 py-1 text-xs font-semibold text-cash-700">
+              LIVE ON THE MARKETPLACE
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
+              Real deals, happening right now
+            </h2>
+            <p className="mt-4 text-lg text-ink-600">
+              A look at properties currently in our pipeline. Exact addresses stay private until a seller is
+              under contract — investors see the full picture once they&apos;re verified.
+            </p>
+          </div>
+          <div className="mt-12">
+            <PropertyShowcase limit={6} />
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+            <KeyHandoverIllustration className="w-full rounded-3xl" />
+            <div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
+                From &quot;I need to sell&quot; to keys handed over
+              </h2>
+              <p className="mt-4 text-lg text-ink-600">
+                No open houses, no repair punch lists, no waiting on buyer financing. Sellers tell us about the
+                property once — our team and our investor network handle the rest.
+              </p>
+              <ul className="mt-6 space-y-3 text-ink-700">
+                <li className="flex gap-3"><span className="text-cash-600">✓</span> Close on your timeline, often in under two weeks</li>
+                <li className="flex gap-3"><span className="text-cash-600">✓</span> Sell as-is — no repairs, no cleaning, no staging</li>
+                <li className="flex gap-3"><span className="text-cash-600">✓</span> Your offer is locked in before investors ever bid</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <section className="bg-ink-900 py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -195,20 +254,79 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 rounded-3xl bg-brand-600 p-10 text-center sm:p-16 lg:grid-cols-[1.5fr_1fr] lg:text-left">
+        {/* ----- Investor-focused lower portion, mirroring the seller section above ----- */}
+
+        <section className="relative overflow-hidden bg-ink-950">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-28">
             <div>
-              <h2 className="text-3xl font-extrabold text-white sm:text-4xl">Ready to see your offer?</h2>
-              <p className="mt-3 text-lg text-brand-100">
-                It takes less than 5 minutes, and there&apos;s zero obligation to accept.
+              <span className="inline-flex items-center gap-2 rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold text-brand-400">
+                FOR INVESTORS
+              </span>
+              <h2 className="mt-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+                Off-market deal flow, <span className="text-brand-400">matched to your buy box</span>
+              </h2>
+              <p className="mt-5 max-w-xl text-lg text-ink-300">
+                Stop scrolling listing sites. We pre-vet sellers, pre-calculate deal economics, and push matched
+                deals straight to you — then let you win them in a transparent live auction.
               </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/signup"
+                  className="rounded-xl bg-brand-600 px-6 py-4 text-base font-semibold text-white shadow-sm hover:bg-brand-500"
+                >
+                  Create Investor Account →
+                </Link>
+                <Link
+                  href="/investors"
+                  className="rounded-xl border border-ink-700 px-6 py-4 text-base font-semibold text-white hover:bg-ink-900"
+                >
+                  See how it works
+                </Link>
+              </div>
             </div>
-            <div className="flex items-center justify-center lg:justify-end">
+            <AuctionIllustration className="w-full rounded-2xl shadow-xl" />
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">How investing works</h2>
+            <p className="mt-4 text-lg text-ink-600">Three steps between you and a matched, vetted deal.</p>
+          </div>
+
+          <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-3">
+            {investorSteps.map((step, i) => (
+              <div key={step.title} className="relative rounded-2xl border border-ink-100 p-8">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                  {i + 1}
+                </span>
+                <h3 className="mt-5 text-lg font-bold text-ink-900">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-ink-600">{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-6 rounded-3xl border border-ink-100 bg-white p-10 shadow-sm sm:p-16 lg:grid-cols-2 lg:gap-10">
+            <div className="rounded-2xl bg-brand-600 p-8 text-center sm:p-10 lg:text-left">
+              <h2 className="text-2xl font-extrabold text-white sm:text-3xl">Ready to see your offer?</h2>
+              <p className="mt-3 text-brand-100">It takes less than 5 minutes, and there&apos;s zero obligation to accept.</p>
               <Link
                 href="/sell"
-                className="rounded-xl bg-white px-8 py-4 text-base font-bold text-brand-700 shadow-sm hover:bg-brand-50"
+                className="mt-6 inline-block rounded-xl bg-white px-6 py-3 text-sm font-bold text-brand-700 shadow-sm hover:bg-brand-50"
               >
                 Get My Cash Offer →
+              </Link>
+            </div>
+            <div className="rounded-2xl bg-ink-950 p-8 text-center sm:p-10 lg:text-left">
+              <h2 className="text-2xl font-extrabold text-white sm:text-3xl">Ready to build your buy box?</h2>
+              <p className="mt-3 text-ink-300">Free to join. Get matched to live deals the moment they hit the market.</p>
+              <Link
+                href="/signup"
+                className="mt-6 inline-block rounded-xl bg-white px-6 py-3 text-sm font-bold text-ink-900 shadow-sm hover:bg-ink-100"
+              >
+                Create Investor Account →
               </Link>
             </div>
           </div>
