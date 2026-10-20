@@ -36,6 +36,18 @@ yarn-error.log*
 # vercel
 .vercel
 
+# AI agent-skill docs auto-installed by `vercel integration add` (Neon, etc.)
+/.agents
+/.claude/skills
+skills-lock.json
+
+# database
+/prisma/dev.db
+/prisma/dev.db-journal
+
+# uploaded demo files
+/public/uploads
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

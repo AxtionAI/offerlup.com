@@ -1,0 +1,211 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SELLER
+  INVESTOR
+  ADMIN
+}
+
+enum PropertyType {
+  SINGLE_FAMILY
+  MULTI_FAMILY
+  CONDO
+  TOWNHOME
+  LAND
+  MOBILE_HOME
+}
+
+enum PropertyCondition {
+  NEEDS_FULL_REHAB
+  NEEDS_MODERATE_WORK
+  LIGHT_COSMETIC
+  MOVE_IN_READY
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  OFFER_READY
+  AUCTION_LIVE
+  AUCTION_ENDED
+  AWARDED
+  CONTRACT_SIGNED
+  CLOSED
+  REJECTED
+}
+
+enum FundsVerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum BidStatus {
+  ACTIVE
+  OUTBID
+  WINNING
+  WON
+  LOST
+  WITHDRAWN
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  role          Role
+  fullName      String
+  phone         String?
+  companyName   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  properties        Property[]       @relation("SellerProperties")
+  buyBoxes          BuyBox[]
+  proofOfFunds      ProofOfFunds[]
+  bids              Bid[]
+  wonAuctions       Property[]       @relation("AwardedInvestor")
+  notifications     Notification[]
+}
+
+model Property {
+  id                String             @id @default(cuid())
+  seller            User               @relation("SellerProperties", fields: [sellerId], references: [id])
+  sellerId          String
+
+  addressLine1      String
+  addressLine2      String?
+  city              String
+  state             String
+  zip               String
+  county            String?
+  latitude          Float?
+  longitude         Float?
+
+  propertyType      PropertyType
+  condition         PropertyCondition
+  bedrooms          Int
+  bathrooms         Float
+  squareFeet         Int
+  lotSizeSqft       Int?
+  yearBuilt         Int?
+
+  zillowEstimate    Float
+  afterRepairValue  Float?
+  rehabCost         Float?
+  offerPrice        Float?
+
+  occupancy         String?
+  challenges        String             @default("[]")
+  reasonForSelling  String?
+  timelineToSell    String?
+  askingPrice       Float?
+
+  photos            Photo[]
+
+  status            SubmissionStatus   @default(SUBMITTED)
+  rejectionReason   String?
+
+  auctionStartsAt   DateTime?
+  auctionEndsAt     DateTime?
+  startingBid       Float?
+  minBidIncrement   Float             @default(500)
+
+  bids              Bid[]
+
+  awardedInvestor   User?             @relation("AwardedInvestor", fields: [awardedInvestorId], references: [id])
+  awardedInvestorId String?
+  winningBidAmount  Float?
+  platformFeeAmount Float?
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId  String
+  url         String
+  caption     String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model BuyBox {
+  id                String   @id @default(cuid())
+  investor          User     @relation(fields: [investorId], references: [id])
+  investorId        String
+
+  name              String
+  active            Boolean  @default(true)
+
+  markets           BuyBoxMarket[]
+  propertyTypes     String
+  minBedrooms       Int?
+  minBathrooms      Float?
+  minSquareFeet     Int?
+  maxSquareFeet     Int?
+  conditions        String
+  minPrice          Float?
+  maxPrice          Float?
+  minYearBuilt      Int?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model BuyBoxMarket {
+  id          String  @id @default(cuid())
+  buyBox      BuyBox  @relation(fields: [buyBoxId], references: [id], onDelete: Cascade)
+  buyBoxId    String
+  label       String
+  city        String?
+  county      String?
+  state       String?
+  zip         String?
+}
+
+model ProofOfFunds {
+  id              String                   @id @default(cuid())
+  investor        User                     @relation(fields: [investorId], references: [id])
+  investorId      String
+  documentName    String
+  documentUrl     String
+  fundsAmount     Float
+  sourceType      String
+  status          FundsVerificationStatus  @default(PENDING)
+  reviewerNote    String?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+}
+
+model Bid {
+  id          String     @id @default(cuid())
+  property    Property   @relation(fields: [propertyId], references: [id])
+  propertyId  String
+  investor    User       @relation(fields: [investorId], references: [id])
+  investorId  String
+  amount      Float
+  status      BidStatus  @default(ACTIVE)
+  createdAt   DateTime   @default(now())
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  title       String
+  body        String
+  link        String?
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
