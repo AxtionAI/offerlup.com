@@ -44,7 +44,7 @@ function LoginForm() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-ink-50 px-4">
+    <main className="flex min-h-screen items-center justify-center bg-cream-50 px-4">
       <div className="w-full max-w-md rounded-2xl border border-ink-100 bg-white p-8 shadow-sm">
         <Link href="/" className="flex items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">

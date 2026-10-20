@@ -72,7 +72,7 @@ export default function InvestorsPage() {
           </div>
         </section>
 
-        <section className="bg-ink-50 py-20">
+        <section className="bg-cream-100 py-20">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-center text-3xl font-extrabold text-ink-900">The economics, in plain numbers</h2>
             <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">

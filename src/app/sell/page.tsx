@@ -7,6 +7,7 @@ import { propertyTypeOptions, conditionTiers, challengeOptions } from "@/lib/val
 import { estimateOfferRange, formatCurrency } from "@/lib/offer";
 import { WizardStepper } from "@/components/WizardStepper";
 import { ConditionPicker } from "@/components/ConditionPicker";
+import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 
 type FormState = {
   addressLine1: string;
@@ -178,7 +179,7 @@ export default function SellPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col bg-ink-50">
+    <main className="flex min-h-screen flex-col bg-cream-50">
       <header className="border-b border-ink-100 bg-white">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
@@ -200,7 +201,21 @@ export default function SellPage() {
               <p className="mt-1 text-sm text-ink-500">The more we understand, the more useful your estimate will be.</p>
               <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Street Address" className="sm:col-span-2">
-                  <input className={inputCls} value={form.addressLine1} onChange={(e) => update({ addressLine1: e.target.value })} placeholder="123 Main St" />
+                  <AddressAutocomplete
+                    className={inputCls}
+                    value={form.addressLine1}
+                    onChange={(v) => update({ addressLine1: v })}
+                    onAddressSelect={(addr) =>
+                      update({
+                        addressLine1: addr.addressLine1 || form.addressLine1,
+                        city: addr.city || form.city,
+                        state: addr.state || form.state,
+                        zip: addr.zip || form.zip,
+                        county: addr.county || form.county,
+                      })
+                    }
+                    placeholder="Start typing your address…"
+                  />
                 </Field>
                 <Field label="Unit / Apt (optional)" className="sm:col-span-2">
                   <input className={inputCls} value={form.addressLine2} onChange={(e) => update({ addressLine2: e.target.value })} />

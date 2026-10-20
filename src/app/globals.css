@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #faf6ee;
   --foreground: #0f172a;
   color-scheme: light;
 }
@@ -12,16 +12,25 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #155eef;
-  --color-brand-700: #1346b8;
-  --color-brand-800: #11399a;
-  --color-brand-900: #122f7d;
+  /* Forest green + sage, from the Offerlup brand reference. brand-600 is the
+     dominant dark forest green (buttons, logo, headings); brand-300 is the
+     lighter sage accent. */
+  --color-brand-50: #eef4ee;
+  --color-brand-100: #dce9dc;
+  --color-brand-200: #b9d4ba;
+  --color-brand-300: #8cae8a;
+  --color-brand-400: #5e8f67;
+  --color-brand-500: #35604a;
+  --color-brand-600: #1b3a2e;
+  --color-brand-700: #152f25;
+  --color-brand-800: #11261d;
+  --color-brand-900: #0d1d16;
+
+  /* Warm cream, used for page backgrounds alongside the forest green/sage. */
+  --color-cream-50: #fbf8f1;
+  --color-cream-100: #f4ecdd;
+  --color-cream-200: #ede3cf;
+  --color-cream-300: #e3d5bb;
 
   --color-cash-50: #ecfdf5;
   --color-cash-100: #d1fae5;
