@@ -53,16 +53,26 @@ export default function Home() {
     <>
       <PublicHeader />
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-white">
+        <section className="relative isolate overflow-hidden">
+          <Image
+            src="/images/hero-key-handover.jpg"
+            alt="A seller handing over the house keys to a real estate agent in front of a sold home"
+            fill
+            priority
+            sizes="100vw"
+            className="-z-10 object-cover object-[center_30%]"
+          />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950/85 via-ink-950/70 to-ink-950/35" />
+
           <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-28">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-cash-100 px-3 py-1 text-xs font-semibold text-cash-700">
                 🏆 Investors compete. You get top dollar.
               </span>
-              <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-ink-900 sm:text-5xl lg:text-6xl">
-                Sell your house the <span className="text-brand-600">smarter</span> way
+              <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Sell your house the <span className="text-brand-300">smarter</span> way
               </h1>
-              <p className="mt-5 max-w-xl text-lg text-ink-600">
+              <p className="mt-5 max-w-xl text-lg text-ink-100">
                 Submit your property once. We send it to a live auction of vetted cash investors who bid against
                 each other to win your deal — driving your guaranteed offer as high as the numbers allow. No
                 showings. No repairs. No commissions.
@@ -81,7 +91,7 @@ export default function Home() {
                   Get My Cash Offer
                 </button>
               </form>
-              <p className="mt-3 text-sm text-ink-400">Free. No obligation. Offer in as little as 24 hours.</p>
+              <p className="mt-3 text-sm text-ink-200">Free. No obligation. Offer in as little as 24 hours.</p>
             </div>
 
             <div className="relative">
