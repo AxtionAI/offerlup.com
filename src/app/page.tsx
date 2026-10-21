@@ -4,6 +4,7 @@ import { PublicFooter } from "@/components/PublicFooter";
 import { PropertyShowcase } from "@/components/PropertyShowcase";
 import { KeyHandoverIllustration } from "@/components/illustrations/KeyHandoverIllustration";
 import { AuctionIllustration } from "@/components/illustrations/AuctionIllustration";
+import { PropertyPlaceholder } from "@/components/illustrations/PropertyPlaceholder";
 
 const steps = [
   {
@@ -85,7 +86,9 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="rounded-2xl border border-ink-100 bg-white p-6 shadow-xl">
+              <div className="overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-xl">
+                <PropertyPlaceholder seed="homepage-hero" className="h-40 w-full" />
+                <div className="p-6">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-ink-500">Your Guaranteed Offer</span>
                   <span className="rounded-full bg-cash-100 px-2.5 py-1 text-xs font-bold text-cash-700">
@@ -126,8 +129,47 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
+                </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <Link
+              href="/sell"
+              className="group overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-sm transition hover:shadow-md"
+            >
+              <KeyHandoverIllustration className="h-40 w-full" />
+              <div className="p-6">
+                <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">Selling a house?</p>
+                <h3 className="mt-1 text-xl font-bold text-ink-900">Get a guaranteed cash offer</h3>
+                <p className="mt-2 text-sm text-ink-600">
+                  Real sellers are getting offers in under 24 hours — no repairs, no showings, no commissions.
+                </p>
+                <span className="mt-4 inline-block text-sm font-semibold text-brand-600 group-hover:underline">
+                  Get My Cash Offer →
+                </span>
+              </div>
+            </Link>
+            <Link
+              href="/investors"
+              className="group overflow-hidden rounded-2xl border border-ink-100 bg-ink-950 shadow-sm transition hover:shadow-md"
+            >
+              <AuctionIllustration className="h-40 w-full" />
+              <div className="p-6">
+                <p className="text-xs font-semibold uppercase tracking-wide text-brand-400">Buying properties?</p>
+                <h3 className="mt-1 text-xl font-bold text-white">Win deals in live auctions</h3>
+                <p className="mt-2 text-sm text-ink-300">
+                  Verified investors are bidding on matched deals right now — see what&apos;s live and build your
+                  buy box.
+                </p>
+                <span className="mt-4 inline-block text-sm font-semibold text-brand-400 group-hover:underline">
+                  Explore For Investors →
+                </span>
+              </div>
+            </Link>
           </div>
         </section>
 
