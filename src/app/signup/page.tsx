@@ -38,7 +38,7 @@ export default function SignupPage() {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
             OL
           </span>
-          <span className="text-lg font-extrabold tracking-tight text-ink-900">OfferLift</span>
+          <span className="text-lg font-extrabold tracking-tight text-ink-900">OfferLup</span>
         </Link>
         <h1 className="mt-6 text-2xl font-extrabold text-ink-900">Create your investor account</h1>
         <p className="mt-1 text-sm text-ink-500">Build your Smart Buy Box and start bidding on matched deals.</p>

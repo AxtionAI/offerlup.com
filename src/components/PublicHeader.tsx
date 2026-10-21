@@ -20,7 +20,7 @@ export async function PublicHeader() {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
             OL
           </span>
-          <span className="text-lg font-extrabold tracking-tight text-ink-900">OfferLift</span>
+          <span className="text-lg font-extrabold tracking-tight text-ink-900">OfferLup</span>
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm font-medium text-ink-600 md:flex">

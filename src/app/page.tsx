@@ -211,7 +211,7 @@ export default function Home() {
 
         <section id="how-it-works" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">How OfferLift works</h2>
+            <h2 className="text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">How OfferLup works</h2>
             <p className="mt-4 text-lg text-ink-600">
               Three simple steps between you and a competitive, guaranteed cash offer.
             </p>

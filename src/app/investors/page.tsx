@@ -42,7 +42,7 @@ export default function InvestorsPage() {
                 Off-market deal flow, matched to your buy box
               </h1>
               <p className="mt-5 text-lg text-ink-300">
-                Stop scrolling listing sites. OfferLift pre-vets sellers, pre-calculates deal economics, and pushes
+                Stop scrolling listing sites. OfferLup pre-vets sellers, pre-calculates deal economics, and pushes
                 matched deals straight to you — then lets you win them in a transparent live auction.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">

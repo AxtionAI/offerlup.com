@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OfferLift — Sell Your House for Top Dollar",
+  title: "OfferLup — Sell Your House for Top Dollar",
   description:
     "Submit your property once. Vetted investors compete to buy it. You get the highest offer, guaranteed.",
 };

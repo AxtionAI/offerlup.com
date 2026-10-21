@@ -10,7 +10,7 @@ export function PublicFooter() {
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
                 OL
               </span>
-              <span className="text-lg font-extrabold tracking-tight text-ink-900">OfferLift</span>
+              <span className="text-lg font-extrabold tracking-tight text-ink-900">OfferLup</span>
             </div>
             <p className="mt-3 max-w-xs text-sm text-ink-500">
               The wholesale marketplace where vetted investors compete for your house, so you get top dollar
@@ -28,7 +28,7 @@ export function PublicFooter() {
           <div>
             <h4 className="text-sm font-semibold text-ink-900">Investors</h4>
             <ul className="mt-3 space-y-2 text-sm text-ink-500">
-              <li><Link href="/investors" className="hover:text-ink-900">Why OfferLift</Link></li>
+              <li><Link href="/investors" className="hover:text-ink-900">Why OfferLup</Link></li>
               <li><Link href="/signup" className="hover:text-ink-900">Create an account</Link></li>
               <li><Link href="/login" className="hover:text-ink-900">Investor login</Link></li>
             </ul>
@@ -43,7 +43,7 @@ export function PublicFooter() {
           </div>
         </div>
         <div className="mt-10 border-t border-ink-200 pt-6 text-xs text-ink-400">
-          © 2026 OfferLift. Demo marketplace for illustration purposes only — not a licensed real estate brokerage.
+          © 2026 OfferLup. Demo marketplace for illustration purposes only — not a licensed real estate brokerage.
         </div>
       </div>
     </footer>

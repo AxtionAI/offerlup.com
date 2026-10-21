@@ -23,7 +23,7 @@ export function PortalShell({
             OL
           </span>
           <div>
-            <div className="text-sm font-extrabold tracking-tight text-white">OfferLift</div>
+            <div className="text-sm font-extrabold tracking-tight text-white">OfferLup</div>
             <div className="text-[11px] text-ink-400">{portalLabel}</div>
           </div>
         </div>

@@ -25,7 +25,7 @@ async function main() {
 
   const admin = await prisma.user.create({
     data: {
-      email: "adminbuys@offerlift.com",
+      email: "adminbuys@offerlup.com",
       passwordHash: await hash("Investor123$"),
       role: "ADMIN",
       fullName: "AdminBuys",
@@ -305,7 +305,7 @@ async function main() {
   });
 
   console.log("Seed complete.");
-  console.log("Login as admin:    adminbuys@offerlift.com / Investor123$");
+  console.log("Login as admin:    adminbuys@offerlup.com / Investor123$");
   console.log("Login as investor: jordan@brightpathcapital.com / investor123");
   console.log("Login as investor: morgan@sunbeltreia.com / investor123 (has pending bid)");
   console.log("Login as seller:   casey.nguyen@example.com / seller123 (offer ready)");
