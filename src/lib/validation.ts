@@ -220,3 +220,32 @@ export const bidSchema = z.object({
   propertyId: z.string(),
   amount: z.coerce.number().min(1),
 });
+
+/**
+ * One row of an admin bulk-investor CSV import, after the admin maps CSV
+ * columns to these keys. Every field arrives as a raw string (or is absent)
+ * — numeric coercion, enum fuzzy-matching, and list-splitting happen
+ * server-side in the import route via helpers in lib/investorImport.ts.
+ */
+export const bulkInvestorRowSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Invalid email"),
+  fullName: z.string().trim().min(2, "Missing full name"),
+  phone: z.string().trim().optional().or(z.literal("")),
+  companyName: z.string().trim().optional().or(z.literal("")),
+  password: z.string().trim().optional().or(z.literal("")),
+  buyBoxName: z.string().trim().optional().or(z.literal("")),
+  markets: z.string().optional().or(z.literal("")),
+  propertyTypes: z.string().optional().or(z.literal("")),
+  conditions: z.string().optional().or(z.literal("")),
+  minPrice: z.string().optional().or(z.literal("")),
+  maxPrice: z.string().optional().or(z.literal("")),
+  minBedrooms: z.string().optional().or(z.literal("")),
+  minBathrooms: z.string().optional().or(z.literal("")),
+  minSquareFeet: z.string().optional().or(z.literal("")),
+  maxSquareFeet: z.string().optional().or(z.literal("")),
+  minYearBuilt: z.string().optional().or(z.literal("")),
+  minGarageSpaces: z.string().optional().or(z.literal("")),
+  requiresPool: z.string().optional().or(z.literal("")),
+});
+
+export type BulkInvestorRow = z.infer<typeof bulkInvestorRowSchema>;
