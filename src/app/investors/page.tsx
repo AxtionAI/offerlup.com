@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PublicHeader } from "@/components/PublicHeader";
 import { PublicFooter } from "@/components/PublicFooter";
 import { PropertyShowcase } from "@/components/PropertyShowcase";
-import { AuctionIllustration } from "@/components/illustrations/AuctionIllustration";
 
 const features = [
   {
@@ -60,7 +60,15 @@ export default function InvestorsPage() {
                 </Link>
               </div>
             </div>
-            <AuctionIllustration className="hidden w-full rounded-2xl shadow-xl lg:block" />
+            <div className="relative hidden aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-xl lg:block">
+              <Image
+                src="/images/investor-closing-deal.jpg"
+                alt="Investors reviewing and signing a matched property deal"
+                fill
+                sizes="50vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         </section>
 

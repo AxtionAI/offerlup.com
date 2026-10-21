@@ -1,9 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PublicHeader } from "@/components/PublicHeader";
 import { PublicFooter } from "@/components/PublicFooter";
 import { PropertyShowcase } from "@/components/PropertyShowcase";
-import { KeyHandoverIllustration } from "@/components/illustrations/KeyHandoverIllustration";
-import { AuctionIllustration } from "@/components/illustrations/AuctionIllustration";
 import { PropertyPlaceholder } from "@/components/illustrations/PropertyPlaceholder";
 
 const steps = [
@@ -141,7 +140,15 @@ export default function Home() {
               href="/sell"
               className="group overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-sm transition hover:shadow-md"
             >
-              <KeyHandoverIllustration className="h-40 w-full" />
+              <div className="relative h-48 w-full overflow-hidden">
+                <Image
+                  src="/images/seller-new-keys.jpg"
+                  alt="Happy couple holding keys to their new home"
+                  fill
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition duration-300 group-hover:scale-105"
+                />
+              </div>
               <div className="p-6">
                 <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">Selling a house?</p>
                 <h3 className="mt-1 text-xl font-bold text-ink-900">Get a guaranteed cash offer</h3>
@@ -157,7 +164,15 @@ export default function Home() {
               href="/investors"
               className="group overflow-hidden rounded-2xl border border-ink-100 bg-ink-950 shadow-sm transition hover:shadow-md"
             >
-              <AuctionIllustration className="h-40 w-full" />
+              <div className="relative h-48 w-full overflow-hidden">
+                <Image
+                  src="/images/investor-closing-deal.jpg"
+                  alt="Investors reviewing and signing a property deal"
+                  fill
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition duration-300 group-hover:scale-105"
+                />
+              </div>
               <div className="p-6">
                 <p className="text-xs font-semibold uppercase tracking-wide text-brand-400">Buying properties?</p>
                 <h3 className="mt-1 text-xl font-bold text-white">Win deals in live auctions</h3>
@@ -225,7 +240,15 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-            <KeyHandoverIllustration className="w-full rounded-3xl" />
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl">
+              <Image
+                src="/images/seller-new-keys.jpg"
+                alt="Happy couple moving into their new home after selling"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
             <div>
               <h2 className="text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
                 From &quot;I need to sell&quot; to keys handed over
@@ -326,7 +349,15 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <AuctionIllustration className="w-full rounded-2xl shadow-xl" />
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-xl">
+              <Image
+                src="/images/investor-closing-deal.jpg"
+                alt="Investors closing on a matched deal"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         </section>
 
