@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { propertyTypeOptions, conditionTiers, challengeOptions, featureOptionGroups } from "@/lib/validation";
+import { propertyTypeOptions, conditionTiers, challengeOptions, featureOptionGroups, photoCategoryOptions } from "@/lib/validation";
 import { estimateOfferRange, formatCurrency } from "@/lib/offer";
 import { WizardStepper } from "@/components/WizardStepper";
 import { ConditionPicker } from "@/components/ConditionPicker";
@@ -75,12 +75,24 @@ const initialState: FormState = {
 
 const STEPS = ["The Property", "The Numbers", "Review & Submit"];
 
+type PhotoCategory = (typeof photoCategoryOptions)[number]["value"];
+
+type UploadedPhoto = { url: string; name: string; category: PhotoCategory };
+
+const GALLERY_SECTIONS: { key: PhotoCategory; label: string; max: number }[] = [
+  { key: "EXTERIOR", label: "Exterior", max: 10 },
+  { key: "KITCHEN", label: "Kitchen", max: 10 },
+  { key: "BATHROOM", label: "Bathrooms", max: 10 },
+  { key: "BEDROOM", label: "Bedrooms", max: 10 },
+  { key: "OTHER", label: "Other", max: 10 },
+];
+
 export default function SellPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(initialState);
-  const [photos, setPhotos] = useState<{ url: string; name: string }[]>([]);
-  const [uploading, setUploading] = useState(false);
+  const [photos, setPhotos] = useState<UploadedPhoto[]>([]);
+  const [uploadingCategory, setUploadingCategory] = useState<PhotoCategory | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -113,27 +125,39 @@ export default function SellPage() {
     return asking - (Number(mortgagePayoff) || 0) - (Number(closingCosts) || 0);
   }, [form.askingPrice, offerRange, mortgagePayoff, closingCosts]);
 
-  async function handlePhotoUpload(files: FileList | null) {
+  async function handlePhotoUpload(files: FileList | null, category: PhotoCategory) {
     if (!files || files.length === 0) return;
-    setUploading(true);
+    setUploadingCategory(category);
     setError(null);
     try {
-      const uploaded: { url: string; name: string }[] = [];
-      for (const file of Array.from(files).slice(0, 10)) {
+      const max = category === "MAIN" ? 1 : GALLERY_SECTIONS.find((s) => s.key === category)?.max ?? 10;
+      const currentCount = category === "MAIN" ? 0 : photos.filter((p) => p.category === category).length;
+      const filesToUpload = Array.from(files).slice(0, Math.max(0, max - currentCount));
+      if (filesToUpload.length === 0) {
+        setError(`You've reached the limit for this section.`);
+        return;
+      }
+
+      const uploaded: UploadedPhoto[] = [];
+      for (const file of filesToUpload) {
         const fd = new FormData();
         fd.append("file", file);
         fd.append("subdir", "properties");
         const res = await fetch("/api/upload", { method: "POST", body: fd });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Upload failed");
-        uploaded.push({ url: data.url, name: file.name });
+        uploaded.push({ url: data.url, name: file.name, category });
       }
-      setPhotos((p) => [...p, ...uploaded]);
+      setPhotos((p) => (category === "MAIN" ? [...p.filter((x) => x.category !== "MAIN"), ...uploaded] : [...p, ...uploaded]));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
-      setUploading(false);
+      setUploadingCategory(null);
     }
+  }
+
+  function removePhoto(url: string) {
+    setPhotos((p) => p.filter((x) => x.url !== url));
   }
 
   async function handleSubmit() {
@@ -145,7 +169,7 @@ export default function SellPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          photoUrls: photos.map((p) => p.url),
+          photos: photos.map((p) => ({ url: p.url, category: p.category })),
         }),
       });
       const data = await res.json();
@@ -333,6 +357,101 @@ export default function SellPage() {
                   ))}
                 </div>
               </div>
+
+              <h2 className="mt-8 text-lg font-bold text-ink-900">Add photos (optional)</h2>
+              <p className="text-sm text-ink-500">
+                Listings with photos get reviewed faster. Upload a main cover photo, then sort the rest by room.
+              </p>
+
+              <div className="mt-4">
+                <span className="mb-2 block text-sm font-medium text-ink-700">Main Photo</span>
+                <p className="mb-2 text-xs text-ink-400">This becomes your listing&apos;s cover photo.</p>
+                {(() => {
+                  const main = photos.find((p) => p.category === "MAIN");
+                  return main ? (
+                    <div className="relative h-40 w-full max-w-sm overflow-hidden rounded-xl border border-ink-200">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={main.url} alt={main.name} className="h-full w-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(main.url)}
+                        className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+                        aria-label="Remove main photo"
+                      >
+                        ×
+                      </button>
+                      <label className="absolute bottom-2 right-2 cursor-pointer rounded-lg bg-white/90 px-2.5 py-1 text-xs font-semibold text-ink-700 hover:bg-white">
+                        Change
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handlePhotoUpload(e.target.files, "MAIN")}
+                        />
+                      </label>
+                    </div>
+                  ) : (
+                    <label className="flex h-40 w-full max-w-sm cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-ink-200 text-center hover:border-brand-400">
+                      <span className="text-sm font-medium text-ink-600">
+                        {uploadingCategory === "MAIN" ? "Uploading…" : "Click to upload a main photo"}
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handlePhotoUpload(e.target.files, "MAIN")}
+                      />
+                    </label>
+                  );
+                })()}
+              </div>
+
+              <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {GALLERY_SECTIONS.map((section) => {
+                  const sectionPhotos = photos.filter((p) => p.category === section.key);
+                  return (
+                    <div key={section.key}>
+                      <span className="mb-2 block text-sm font-medium text-ink-700">
+                        {section.label}{" "}
+                        <span className="font-normal text-ink-400">
+                          ({sectionPhotos.length}/{section.max})
+                        </span>
+                      </span>
+                      <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-ink-200 p-5 text-center hover:border-brand-400">
+                        <span className="text-xs font-medium text-ink-600">
+                          {uploadingCategory === section.key ? "Uploading…" : `Upload ${section.label.toLowerCase()} photos`}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          disabled={sectionPhotos.length >= section.max}
+                          onChange={(e) => handlePhotoUpload(e.target.files, section.key)}
+                        />
+                      </label>
+                      {sectionPhotos.length > 0 && (
+                        <div className="mt-2 grid grid-cols-4 gap-2">
+                          {sectionPhotos.map((p) => (
+                            <div key={p.url} className="group relative h-16 w-full overflow-hidden rounded-lg">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={p.url} alt={p.name} className="h-full w-full object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => removePhoto(p.url)}
+                                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-xs text-white opacity-0 hover:bg-black/80 group-hover:opacity-100"
+                                aria-label="Remove photo"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </section>
           )}
 
@@ -403,23 +522,6 @@ export default function SellPage() {
                   <textarea className={inputCls} rows={3} value={form.reasonForSelling} onChange={(e) => update({ reasonForSelling: e.target.value })} placeholder="Condition, timing, or your goals." />
                 </Field>
               </div>
-
-              <h2 className="mt-8 text-lg font-bold text-ink-900">Add photos (optional)</h2>
-              <p className="text-sm text-ink-500">Listings with photos get reviewed faster.</p>
-              <label className="mt-3 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-ink-200 p-8 text-center hover:border-brand-400">
-                <span className="text-sm font-medium text-ink-600">
-                  {uploading ? "Uploading…" : "Click to upload photos"}
-                </span>
-                <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handlePhotoUpload(e.target.files)} />
-              </label>
-              {photos.length > 0 && (
-                <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-5">
-                  {photos.map((p) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img key={p.url} src={p.url} alt={p.name} className="h-20 w-full rounded-lg object-cover" />
-                  ))}
-                </div>
-              )}
             </section>
           )}
 
@@ -481,7 +583,22 @@ export default function SellPage() {
                   }
                 />
                 <Row label="Estimated Offer Range" value={offerRange ? `${formatCurrency(offerRange.low)} – ${formatCurrency(offerRange.high)}` : "—"} />
-                <Row label="Photos" value={`${photos.length} uploaded`} />
+                <Row
+                  label="Photos"
+                  value={
+                    photos.length === 0
+                      ? "None uploaded"
+                      : [
+                          photos.some((p) => p.category === "MAIN") && "1 main",
+                          ...GALLERY_SECTIONS.map((s) => {
+                            const n = photos.filter((p) => p.category === s.key).length;
+                            return n > 0 ? `${n} ${s.label.toLowerCase()}` : null;
+                          }),
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")
+                  }
+                />
               </dl>
               <p className="mt-6 text-xs text-ink-400">
                 By submitting, you agree our team can calculate a guaranteed cash offer and share your deal

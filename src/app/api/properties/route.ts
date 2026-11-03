@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, createSessionCookie, getSession } from "@/lib/auth";
-import { sellerSubmissionSchema } from "@/lib/validation";
+import { sellerSubmissionSchema, propertyPhotoSchema, type PropertyPhotoInput } from "@/lib/validation";
+
+const CATEGORY_ORDER = ["MAIN", "EXTERIOR", "KITCHEN", "BATHROOM", "BEDROOM", "OTHER"] as const;
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -10,7 +12,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
   }
   const data = parsed.data;
-  const photoUrls: string[] = Array.isArray(body.photoUrls) ? body.photoUrls : [];
+
+  const photosInput: unknown[] = Array.isArray(body.photos)
+    ? body.photos
+    : Array.isArray(body.photoUrls)
+      ? body.photoUrls.map((url: string) => ({ url, category: "OTHER" }))
+      : [];
+  const photos: PropertyPhotoInput[] = photosInput
+    .map((p) => propertyPhotoSchema.safeParse(p))
+    .filter((r): r is { success: true; data: PropertyPhotoInput } => r.success)
+    .map((r) => r.data)
+    .sort((a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category));
 
   let seller = await prisma.user.findUnique({ where: { email: data.email } });
 
@@ -64,7 +76,7 @@ export async function POST(req: NextRequest) {
       askingPrice: data.askingPrice,
       status: "SUBMITTED",
       photos: {
-        create: photoUrls.map((url, i) => ({ url, sortOrder: i })),
+        create: photos.map((p, i) => ({ url: p.url, category: p.category, sortOrder: i })),
       },
     },
   });

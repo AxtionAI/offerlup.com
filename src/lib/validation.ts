@@ -121,6 +121,22 @@ export const featureOptionGroups = [
 
 export const featureOptions: { value: string; label: string }[] = featureOptionGroups.flatMap((g) => [...g.options]);
 
+export const photoCategoryOptions = [
+  { value: "MAIN", label: "Main Photo" },
+  { value: "EXTERIOR", label: "Exterior" },
+  { value: "KITCHEN", label: "Kitchen" },
+  { value: "BATHROOM", label: "Bathrooms" },
+  { value: "BEDROOM", label: "Bedrooms" },
+  { value: "OTHER", label: "Other" },
+] as const;
+
+export const propertyPhotoSchema = z.object({
+  url: z.string().min(1),
+  category: z.enum(["MAIN", "EXTERIOR", "KITCHEN", "BATHROOM", "BEDROOM", "OTHER"]).default("OTHER"),
+});
+
+export type PropertyPhotoInput = z.infer<typeof propertyPhotoSchema>;
+
 export const sellerSubmissionSchema = z.object({
   fullName: z.string().min(2, "Enter your full name"),
   email: z.string().email("Enter a valid email"),

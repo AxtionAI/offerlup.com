@@ -6,6 +6,7 @@ import { settleAuctionIfNeeded } from "@/lib/auction";
 import { StatusPill } from "@/components/StatusPill";
 import { formatCurrency } from "@/lib/offer";
 import { CountdownTimer } from "@/components/CountdownTimer";
+import { photoCategoryOptions } from "@/lib/validation";
 
 const STEPS = [
   "SUBMITTED",
@@ -70,14 +71,38 @@ export default async function SellerPropertyDetail({ params }: { params: Promise
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
-          {property.photos.length > 0 && (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {property.photos.map((photo) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={photo.id} src={photo.url} alt="" className="h-28 w-full rounded-xl object-cover" />
-              ))}
-            </div>
-          )}
+          {property.photos.length > 0 && (() => {
+            const main = property.photos.find((p) => p.category === "MAIN");
+            const byCategory = photoCategoryOptions
+              .filter((c) => c.value !== "MAIN")
+              .map((c) => ({
+                label: c.label,
+                photos: property.photos.filter((p) => p.category === c.value),
+              }))
+              .filter((g) => g.photos.length > 0);
+
+            return (
+              <div className="space-y-4">
+                {main && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={main.url} alt="Main property photo" className="h-56 w-full rounded-2xl object-cover" />
+                )}
+                {byCategory.map((group) => (
+                  <div key={group.label}>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-400">
+                      {group.label}
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                      {group.photos.map((photo) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img key={photo.id} src={photo.url} alt="" className="h-28 w-full rounded-xl object-cover" />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
 
           <div className="rounded-2xl border border-ink-100 bg-white p-6">
             <h2 className="font-bold text-ink-900">Property Details</h2>
