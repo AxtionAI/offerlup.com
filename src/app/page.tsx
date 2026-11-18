@@ -77,11 +77,9 @@ export default function Home() {
               </h1>
               <p className="mt-5 max-w-xl text-lg font-medium text-white">
                 The wholesale marketplace where vetted investors compete for your house, so you get top dollar
-                without lifting a finger.
-              </p>
-              <p className="mt-3 max-w-xl text-base text-ink-100">
-                Tell us about your home once, and let vetted cash investors compete to win your deal fast —
-                pushing your guaranteed offer up, never down. No showings, no repairs, no commissions, no stress.
+                without lifting a finger. Tell us about your home once, and let vetted cash investors compete to
+                win your deal fast — pushing your guaranteed offer up, never down. No showings, no repairs, no
+                commissions, no stress.
               </p>
 
               <form action="/sell" className="mt-8 flex max-w-xl flex-col gap-3 sm:flex-row">
