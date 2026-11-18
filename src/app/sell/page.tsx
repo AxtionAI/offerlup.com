@@ -364,7 +364,10 @@ export default function SellPage() {
               </p>
 
               <div className="mt-4">
-                <span className="mb-2 block text-sm font-medium text-ink-700">Main Photo</span>
+                <span className="mb-2 block text-sm font-medium text-ink-700">
+                  Main Photo{" "}
+                  <span className="font-normal text-ink-400">(JPG, PNG, or WEBP · up to 10MB)</span>
+                </span>
                 <p className="mb-2 text-xs text-ink-400">This becomes your listing&apos;s cover photo.</p>
                 {(() => {
                   const main = photos.find((p) => p.category === "MAIN");
@@ -415,6 +418,9 @@ export default function SellPage() {
                         {section.label}{" "}
                         <span className="font-normal text-ink-400">
                           ({sectionPhotos.length}/{section.max})
+                        </span>
+                        <span className="block font-normal text-ink-400">
+                          JPG, PNG, or WEBP · up to 10MB each
                         </span>
                       </span>
                       <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-ink-200 p-5 text-center hover:border-brand-400">

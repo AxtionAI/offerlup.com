@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OfferLup — Sell Your House for Top Dollar",
+  title: "OfferLup — Sell Your House Fast for Top Dollar",
   description:
-    "Submit your property once. Vetted investors compete to buy it. You get the highest offer, guaranteed.",
+    "The wholesale marketplace where vetted investors compete for your house, so you get top dollar without lifting a finger.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

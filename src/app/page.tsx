@@ -4,6 +4,8 @@ import { PublicHeader } from "@/components/PublicHeader";
 import { PublicFooter } from "@/components/PublicFooter";
 import { PropertyShowcase } from "@/components/PropertyShowcase";
 import { PropertyPlaceholder } from "@/components/illustrations/PropertyPlaceholder";
+import { Testimonials } from "@/components/Testimonials";
+import { Reveal } from "@/components/Reveal";
 
 const steps = [
   {
@@ -24,9 +26,9 @@ const steps = [
 ];
 
 const trustStats = [
+  { value: "11 days", label: "Average time to close" },
   { value: "2,400+", label: "Vetted investors nationwide" },
   { value: "$186M+", label: "In competitive offers generated" },
-  { value: "11 days", label: "Average time to close" },
   { value: "0%", label: "Commission charged to sellers" },
 ];
 
@@ -60,22 +62,26 @@ export default function Home() {
             fill
             priority
             sizes="100vw"
-            className="-z-10 object-cover object-[center_30%]"
+            className="-z-10 animate-kenburns object-cover object-[center_30%] brightness-110 saturate-110"
           />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950/85 via-ink-950/70 to-ink-950/35" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-900/70 via-brand-900/45 to-brand-900/10" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-brand-900/30 via-transparent to-cash-300/10" />
 
           <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-28">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-cash-100 px-3 py-1 text-xs font-semibold text-cash-700">
-                🏆 Investors compete. You get top dollar.
+                ⚡ Sell fast. Feel good about it.
               </span>
               <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Sell your house the <span className="text-brand-300">smarter</span> way
+                Sell your house fast, the <span className="text-brand-300">happier</span> way
               </h1>
-              <p className="mt-5 max-w-xl text-lg text-ink-100">
-                Submit your property once. We send it to a live auction of vetted cash investors who bid against
-                each other to win your deal — driving your guaranteed offer as high as the numbers allow. No
-                showings. No repairs. No commissions.
+              <p className="mt-5 max-w-xl text-lg font-medium text-white">
+                The wholesale marketplace where vetted investors compete for your house, so you get top dollar
+                without lifting a finger.
+              </p>
+              <p className="mt-3 max-w-xl text-base text-ink-100">
+                Tell us about your home once, and let vetted cash investors compete to win your deal fast —
+                pushing your guaranteed offer up, never down. No showings, no repairs, no commissions, no stress.
               </p>
 
               <form action="/sell" className="mt-8 flex max-w-xl flex-col gap-3 sm:flex-row">
@@ -92,10 +98,14 @@ export default function Home() {
                 </button>
               </form>
               <p className="mt-3 text-sm text-ink-200">Free. No obligation. Offer in as little as 24 hours.</p>
+              <a href="#reviews" className="mt-5 inline-flex items-center gap-2 text-sm text-ink-100 hover:text-white">
+                <span className="text-cash-300" aria-hidden="true">★★★★★</span>
+                <span>See what our sellers and investors are saying ↓</span>
+              </a>
             </div>
 
-            <div className="relative">
-              <div className="overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-xl">
+            <div className="relative animate-float">
+              <div className="overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-2xl">
                 <PropertyPlaceholder seed="homepage-hero" className="h-40 w-full" />
                 <div className="p-6">
                 <div className="flex items-center justify-between">
@@ -146,66 +156,87 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <Link
-              href="/sell"
-              className="group overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-sm transition hover:shadow-md"
-            >
-              <div className="relative h-48 w-full overflow-hidden">
-                <Image
-                  src="/images/seller-new-keys.jpg"
-                  alt="Happy couple holding keys to their new home"
-                  fill
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">Selling a house?</p>
-                <h3 className="mt-1 text-xl font-bold text-ink-900">Get a guaranteed cash offer</h3>
-                <p className="mt-2 text-sm text-ink-600">
-                  Real sellers are getting offers in under 24 hours — no repairs, no showings, no commissions.
-                </p>
-                <span className="mt-4 inline-block text-sm font-semibold text-brand-600 group-hover:underline">
-                  Get My Cash Offer →
-                </span>
-              </div>
-            </Link>
-            <Link
-              href="/investors"
-              className="group overflow-hidden rounded-2xl border border-ink-100 bg-ink-950 shadow-sm transition hover:shadow-md"
-            >
-              <div className="relative h-48 w-full overflow-hidden">
-                <Image
-                  src="/images/investor-closing-deal.jpg"
-                  alt="Investors reviewing and signing a property deal"
-                  fill
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-xs font-semibold uppercase tracking-wide text-brand-400">Buying properties?</p>
-                <h3 className="mt-1 text-xl font-bold text-white">Win deals in live auctions</h3>
-                <p className="mt-2 text-sm text-ink-300">
-                  Verified investors are bidding on matched deals right now — see what&apos;s live and build your
-                  buy box.
-                </p>
-                <span className="mt-4 inline-block text-sm font-semibold text-brand-400 group-hover:underline">
-                  Explore For Investors →
-                </span>
-              </div>
-            </Link>
+            <Reveal>
+              <Link
+                href="/sell"
+                className="group block overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Image
+                    src="/images/seller-new-keys.jpg"
+                    alt="Happy couple holding keys to their new home"
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover brightness-110 saturate-110 transition duration-500 group-hover:scale-110 group-hover:brightness-125"
+                  />
+                </div>
+                <div className="p-6">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">Selling a house?</p>
+                  <h3 className="mt-1 text-xl font-bold text-ink-900">Get a guaranteed cash offer</h3>
+                  <p className="mt-2 text-sm text-ink-600">
+                    Real sellers are getting offers in under 24 hours — no repairs, no showings, no commissions.
+                  </p>
+                  <span className="mt-4 inline-block text-sm font-semibold text-brand-600 group-hover:underline">
+                    Get My Cash Offer →
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
+            <Reveal delay={120}>
+              <Link
+                href="/investors"
+                className="group block overflow-hidden rounded-2xl border border-ink-100 bg-ink-950 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Image
+                    src="/images/investor-closing-deal.jpg"
+                    alt="Investors reviewing and signing a property deal"
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover brightness-110 saturate-110 transition duration-500 group-hover:scale-110 group-hover:brightness-125"
+                  />
+                </div>
+                <div className="p-6">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-400">Buying properties?</p>
+                  <h3 className="mt-1 text-xl font-bold text-white">Win deals in live auctions</h3>
+                  <p className="mt-2 text-sm text-ink-300">
+                    Verified investors are bidding on matched deals right now — see what&apos;s live and build your
+                    buy box.
+                  </p>
+                  <span className="mt-4 inline-block text-sm font-semibold text-brand-400 group-hover:underline">
+                    Explore For Investors →
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
           </div>
         </section>
 
         <section className="border-y border-ink-100 bg-white py-10">
           <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 sm:px-6 md:grid-cols-4 lg:px-8">
-            {trustStats.map((s) => (
-              <div key={s.label} className="text-center">
+            {trustStats.map((s, i) => (
+              <Reveal key={s.label} delay={i * 80} className="text-center">
                 <div className="text-3xl font-extrabold text-ink-900">{s.value}</div>
                 <div className="mt-1 text-sm text-ink-500">{s.label}</div>
-              </div>
+              </Reveal>
             ))}
+          </div>
+        </section>
+
+        <section id="reviews" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <span className="inline-flex items-center gap-2 rounded-full bg-cash-100 px-3 py-1 text-xs font-semibold text-cash-700">
+              ♥ Loved by our community
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
+              Real people, real stories
+            </h2>
+            <p className="mt-4 text-lg text-ink-600">
+              Hear from the homeowners who sold fast and the investors who found their next deal.
+            </p>
+          </Reveal>
+          <div className="mt-12">
+            <Testimonials />
           </div>
         </section>
 
@@ -213,19 +244,19 @@ export default function Home() {
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">How OfferLup works</h2>
             <p className="mt-4 text-lg text-ink-600">
-              Three simple steps between you and a competitive, guaranteed cash offer.
+              Three simple steps between you and a fast, competitive, guaranteed cash offer.
             </p>
           </div>
 
           <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-3">
             {steps.map((step, i) => (
-              <div key={step.title} className="relative rounded-2xl border border-ink-100 p-8">
+              <Reveal key={step.title} delay={i * 100} className="relative rounded-2xl border border-ink-100 p-8">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
                   {i + 1}
                 </span>
                 <h3 className="mt-5 text-lg font-bold text-ink-900">{step.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-ink-600">{step.body}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </section>
@@ -250,15 +281,15 @@ export default function Home() {
 
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl">
+            <Reveal className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl">
               <Image
                 src="/images/seller-new-keys.jpg"
                 alt="Happy couple moving into their new home after selling"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
+                className="animate-kenburns object-cover brightness-110 saturate-110"
               />
-            </div>
+            </Reveal>
             <div>
               <h2 className="text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
                 From &quot;I need to sell&quot; to keys handed over
@@ -359,15 +390,15 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-xl">
+            <Reveal className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-xl">
               <Image
                 src="/images/investor-closing-deal.jpg"
                 alt="Investors closing on a matched deal"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
+                className="animate-kenburns object-cover brightness-110 saturate-110"
               />
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -379,13 +410,13 @@ export default function Home() {
 
           <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-3">
             {investorSteps.map((step, i) => (
-              <div key={step.title} className="relative rounded-2xl border border-ink-100 p-8">
+              <Reveal key={step.title} delay={i * 100} className="relative rounded-2xl border border-ink-100 p-8">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
                   {i + 1}
                 </span>
                 <h3 className="mt-5 text-lg font-bold text-ink-900">{step.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-ink-600">{step.body}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </section>
