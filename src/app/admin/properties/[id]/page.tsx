@@ -27,6 +27,7 @@ type Property = {
   zillowEstimate: number;
   afterRepairValue: number | null;
   rehabCost: number | null;
+  askingPrice: number | null;
   offerPrice: number | null;
   startingBid: number | null;
   auctionEndsAt: string | null;
@@ -214,6 +215,16 @@ export default function AdminPropertyPage({ params }: { params: Promise<{ id: st
             <div className="rounded-2xl border border-ink-100 bg-white p-6">
               <h2 className="font-bold text-ink-900">Start Investor Auction</h2>
               <p className="mt-1 text-sm text-ink-500">Guaranteed offer: <strong>{money(property.offerPrice)}</strong> (fixed for the seller)</p>
+              <p className="text-sm text-ink-500">
+                Seller&apos;s asking price: <strong>{money(property.askingPrice)}</strong>
+                {property.askingPrice == null && " (not provided)"}
+              </p>
+              {property.askingPrice != null && (
+                <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                  Bids are not required to meet the asking price — investors can and often will bid below it.
+                  Setting the Starting Bid above {money(property.askingPrice)} would block that on purpose.
+                </p>
+              )}
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <label className="block">
                   <span className="mb-1.5 block text-sm font-medium text-ink-700">Duration (hours)</span>
