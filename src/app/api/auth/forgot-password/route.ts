@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { generateResetToken } from "@/lib/auth";
 import { forgotPasswordSchema } from "@/lib/validation";
 import { sendPasswordResetEmail } from "@/lib/email";
+import { sendPasswordResetText } from "@/lib/sms";
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
@@ -31,6 +32,9 @@ export async function POST(req: NextRequest) {
     const origin = req.nextUrl.origin;
     const resetUrl = `${origin}/reset-password?token=${rawToken}`;
     await sendPasswordResetEmail(user.email, resetUrl);
+    if (user.phone) {
+      await sendPasswordResetText(user.phone, resetUrl);
+    }
   }
 
   return NextResponse.json({ ok: true });
