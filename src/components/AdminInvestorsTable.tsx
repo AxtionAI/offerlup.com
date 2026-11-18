@@ -19,7 +19,7 @@ type InvestorRow = {
   fullName: string;
   email: string;
   phone: string | null;
-  companyName: string | null;
+  companies: string[];
   createdAt: string;
   bidCount: number;
   buyBoxCount: number;
@@ -37,7 +37,7 @@ export function AdminInvestorsTable({ investors }: { investors: InvestorRow[] })
     const q = query.trim().toLowerCase();
     if (!q) return investors;
     return investors.filter((inv) => {
-      const haystack = `${inv.fullName} ${inv.email} ${inv.companyName ?? ""} ${inv.targetMarkets.join(" ")}`.toLowerCase();
+      const haystack = `${inv.fullName} ${inv.email} ${inv.companies.join(" ")} ${inv.targetMarkets.join(" ")}`.toLowerCase();
       return haystack.includes(q);
     });
   }, [investors, query]);
@@ -79,7 +79,9 @@ export function AdminInvestorsTable({ investors }: { investors: InvestorRow[] })
                   <tr className="hover:bg-ink-50/50">
                     <td className="px-4 py-3">
                       <p className="font-semibold text-ink-900">{inv.fullName}</p>
-                      <p className="text-xs text-ink-500">{inv.companyName ?? inv.email}</p>
+                      <p className="text-xs text-ink-500">
+                        {inv.companies.length > 0 ? inv.companies.join(", ") : inv.email}
+                      </p>
                     </td>
                     <td className="px-4 py-3 text-ink-600">
                       {inv.targetMarkets.length > 0 ? (
@@ -114,6 +116,18 @@ export function AdminInvestorsTable({ investors }: { investors: InvestorRow[] })
                             <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">Contact</p>
                             <p className="mt-1 text-ink-700">{inv.email}</p>
                             <p className="text-ink-700">{inv.phone ?? "No phone on file"}</p>
+                            {inv.companies.length > 0 && (
+                              <div className="mt-2">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
+                                  Companies / LLCs
+                                </p>
+                                <ul className="mt-1 list-disc pl-4 text-ink-700">
+                                  {inv.companies.map((c) => (
+                                    <li key={c}>{c}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                             <p className="mt-2 text-xs text-ink-400">
                               Joined {new Date(inv.createdAt).toLocaleDateString()} · {inv.bidCount} total bids ·{" "}
                               {inv.buyBoxCount} buy box{inv.buyBoxCount === 1 ? "" : "es"}

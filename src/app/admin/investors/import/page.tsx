@@ -114,6 +114,7 @@ export default function InvestorImportPage() {
   const [results, setResults] = useState<ImportRowResult[] | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function resetAll() {
@@ -132,6 +133,10 @@ export default function InvestorImportPage() {
 
   async function handleFile(file: File) {
     setFileError(null);
+    if (!file.name.toLowerCase().endsWith(".csv") && file.type !== "text/csv" && file.type !== "") {
+      setFileError("That doesn't look like a CSV file. Please upload a .csv file.");
+      return;
+    }
     const text = await file.text();
     const { headers: parsedHeaders, rows } = parseCsv(text);
     if (parsedHeaders.length === 0 || rows.length === 0) {
@@ -233,7 +238,34 @@ export default function InvestorImportPage() {
       </div>
 
       {step === "upload" && (
-        <div className="mt-8 rounded-2xl border-2 border-dashed border-ink-200 bg-white p-12 text-center">
+        <div
+          onDragEnter={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(true);
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!isDragging) setIsDragging(true);
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+            setIsDragging(false);
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(false);
+            const file = e.dataTransfer.files?.[0];
+            if (file) handleFile(file);
+          }}
+          className={`mt-8 rounded-2xl border-2 border-dashed p-12 text-center transition-colors ${
+            isDragging ? "border-brand-500 bg-brand-50" : "border-ink-200 bg-white"
+          }`}
+        >
           <p className="text-sm font-semibold text-ink-700">Drop a CSV file here, or choose one to upload</p>
           <p className="mt-1 text-xs text-ink-400">
             First row should be column headers. We&apos;ll let you map each column to an investor field next.

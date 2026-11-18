@@ -191,7 +191,7 @@ export const investorSignupSchema = z.object({
   fullName: z.string().min(2, "Enter your full name"),
   email: z.string().email("Enter a valid email"),
   phone: z.string().min(7, "Enter a valid phone number"),
-  companyName: z.string().optional(),
+  companyNames: z.array(z.string().min(1, "Company name can't be empty")).max(20).optional(),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 

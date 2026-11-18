@@ -9,7 +9,8 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
   }
-  const { fullName, email, phone, companyName, password } = parsed.data;
+  const { fullName, email, phone, companyNames, password } = parsed.data;
+  const companies = (companyNames ?? []).map((c) => c.trim()).filter(Boolean);
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -22,7 +23,8 @@ export async function POST(req: NextRequest) {
       fullName,
       email,
       phone,
-      companyName,
+      companyName: companies[0] ?? null,
+      companyNames: JSON.stringify(companies),
       passwordHash,
       role: "INVESTOR",
     },

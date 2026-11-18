@@ -2,6 +2,16 @@ import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/offer";
 import { AdminInvestorsTable } from "@/components/AdminInvestorsTable";
 
+function parseCompanies(companyNames: string, legacyCompanyName: string | null): string[] {
+  try {
+    const parsed = JSON.parse(companyNames);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+  } catch {
+    // fall through to legacy field
+  }
+  return legacyCompanyName ? [legacyCompanyName] : [];
+}
+
 export default async function AdminInvestorsPage() {
   const investors = await prisma.user.findMany({
     where: { role: "INVESTOR" },
@@ -52,7 +62,7 @@ export default async function AdminInvestorsPage() {
           fullName: inv.fullName,
           email: inv.email,
           phone: inv.phone,
-          companyName: inv.companyName,
+          companies: parseCompanies(inv.companyNames, inv.companyName),
           createdAt: inv.createdAt.toISOString(),
           bidCount: inv._count.bids,
           buyBoxCount: inv._count.buyBoxes,

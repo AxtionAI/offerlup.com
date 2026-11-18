@@ -6,19 +6,33 @@ import Link from "next/link";
 
 export default function SignupPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ fullName: "", email: "", phone: "", companyName: "", password: "" });
+  const [form, setForm] = useState({ fullName: "", email: "", phone: "", password: "" });
+  const [companies, setCompanies] = useState<string[]>([""]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  function updateCompany(index: number, value: string) {
+    setCompanies((c) => c.map((name, i) => (i === index ? value : name)));
+  }
+
+  function addCompany() {
+    setCompanies((c) => [...c, ""]);
+  }
+
+  function removeCompany(index: number) {
+    setCompanies((c) => c.filter((_, i) => i !== index));
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
+      const companyNames = companies.map((c) => c.trim()).filter(Boolean);
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, companyNames }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Signup failed");
@@ -53,14 +67,41 @@ export default function SignupPage() {
               className="w-full rounded-lg border border-ink-200 px-3.5 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
             />
           </label>
-          <label className="block">
-            <span className="mb-1.5 block text-sm font-medium text-ink-700">Company Name (optional)</span>
-            <input
-              value={form.companyName}
-              onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-              className="w-full rounded-lg border border-ink-200 px-3.5 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-            />
-          </label>
+          <div>
+            <span className="mb-1.5 block text-sm font-medium text-ink-700">Company / LLC Information (optional)</span>
+            <p className="mb-2 text-xs text-ink-400">
+              Add every entity you buy under — you can add more than one.
+            </p>
+            <div className="space-y-2">
+              {companies.map((name, i) => (
+                <div key={i} className="flex gap-2">
+                  <input
+                    value={name}
+                    onChange={(e) => updateCompany(i, e.target.value)}
+                    placeholder={`Company or LLC name${i > 0 ? ` #${i + 1}` : ""}`}
+                    className="w-full rounded-lg border border-ink-200 px-3.5 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                  />
+                  {companies.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeCompany(i)}
+                      aria-label="Remove company"
+                      className="rounded-lg border border-ink-200 px-3 text-ink-400 hover:bg-ink-50 hover:text-red-600"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addCompany}
+              className="mt-2 text-sm font-semibold text-brand-600 hover:underline"
+            >
+              + Add another company
+            </button>
+          </div>
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-ink-700">Email</span>
             <input
