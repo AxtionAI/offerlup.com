@@ -67,7 +67,12 @@ function LoginForm() {
             />
           </label>
           <label className="block">
-            <span className="mb-1.5 block text-sm font-medium text-ink-700">Password</span>
+            <span className="mb-1.5 flex items-center justify-between text-sm font-medium text-ink-700">
+              Password
+              <Link href="/forgot-password" className="text-xs font-semibold text-brand-600 hover:underline">
+                Forgot password?
+              </Link>
+            </span>
             <input
               type="password"
               required

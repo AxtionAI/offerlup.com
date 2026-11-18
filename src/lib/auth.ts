@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { connection } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { prisma } from "./prisma";
 import type { Role } from "@prisma/client";
 
@@ -65,4 +66,18 @@ export async function requireRole(role: Role) {
   const session = await getSession();
   if (!session || session.role !== role) return null;
   return session;
+}
+
+/**
+ * The raw token goes in the reset link; only its hash is stored, so a DB
+ * leak can't be used to reset accounts.
+ */
+export function generateResetToken() {
+  const rawToken = crypto.randomBytes(32).toString("hex");
+  const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
+  return { rawToken, tokenHash };
+}
+
+export function hashResetToken(rawToken: string) {
+  return crypto.createHash("sha256").update(rawToken).digest("hex");
 }
