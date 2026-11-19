@@ -22,6 +22,12 @@ enum PhotoCategory {
   OTHER
 }
 
+enum EnrichmentStatus {
+  MATCHED
+  NO_MATCH
+  ERROR
+}
+
 enum PropertyType {
   SINGLE_FAMILY
   MULTI_FAMILY
@@ -139,6 +145,7 @@ model Property {
   askingPrice       Float?
 
   photos            Photo[]
+  enrichment        PropertyEnrichment?
 
   status            SubmissionStatus   @default(SUBMITTED)
   rejectionReason   String?
@@ -157,6 +164,17 @@ model Property {
 
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
+}
+
+model PropertyEnrichment {
+  id         String           @id @default(cuid())
+  property   Property         @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String           @unique
+  status     EnrichmentStatus
+  errorMessage String?
+  // Full "properties[0]" object from BatchData's property/lookup/all-attributes response.
+  data       Json?
+  fetchedAt  DateTime         @default(now())
 }
 
 model Photo {

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, createSessionCookie, getSession } from "@/lib/auth";
 import { sellerSubmissionSchema, propertyPhotoSchema, type PropertyPhotoInput } from "@/lib/validation";
+import { enrichProperty } from "@/lib/batchdata";
 
 const CATEGORY_ORDER = ["MAIN", "EXTERIOR", "KITCHEN", "BATHROOM", "BEDROOM", "OTHER"] as const;
 
@@ -82,6 +84,15 @@ export async function POST(req: NextRequest) {
   });
 
   await createSessionCookie({ userId: seller.id, role: seller.role, email: seller.email });
+
+  after(() =>
+    enrichProperty(property.id, {
+      street: data.addressLine1,
+      city: data.city,
+      state: data.state.toUpperCase(),
+      zip: data.zip,
+    })
+  );
 
   return NextResponse.json({ ok: true, propertyId: property.id });
 }

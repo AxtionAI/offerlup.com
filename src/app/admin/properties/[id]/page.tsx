@@ -5,6 +5,7 @@ import Link from "next/link";
 import { StatusPill } from "@/components/StatusPill";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { ConfirmButton } from "@/components/ConfirmButton";
+import { PropertyEnrichmentPanel, type PropertyEnrichmentData } from "@/components/PropertyEnrichmentPanel";
 
 function money(n: number | null | undefined) {
   if (n === null || n === undefined) return "—";
@@ -33,10 +34,12 @@ type Property = {
   auctionEndsAt: string | null;
   winningBidAmount: number | null;
   platformFeeAmount: number | null;
+  yearBuilt: number | null;
   seller: { fullName: string; email: string; phone: string | null };
   awardedInvestor: { fullName: string; email: string } | null;
   photos: { url: string }[];
   bids: Bid[];
+  enrichment: PropertyEnrichmentData | null;
 };
 
 export default function AdminPropertyPage({ params }: { params: Promise<{ id: string }> }) {
@@ -164,6 +167,17 @@ export default function AdminPropertyPage({ params }: { params: Promise<{ id: st
               <div><dt className="text-xs text-ink-500">Bd/Ba/Sqft</dt><dd className="font-semibold text-ink-900">{property.bedrooms}/{property.bathrooms}/{property.squareFeet}</dd></div>
             </dl>
           </div>
+
+          <PropertyEnrichmentPanel
+            enrichment={property.enrichment}
+            sellerFullName={property.seller.fullName}
+            submitted={{
+              yearBuilt: property.yearBuilt,
+              squareFeet: property.squareFeet,
+              bedrooms: property.bedrooms,
+              bathrooms: property.bathrooms,
+            }}
+          />
 
           {(property.status === "SUBMITTED" || property.status === "UNDER_REVIEW") && (
             <div className="rounded-2xl border border-ink-100 bg-white p-6">
