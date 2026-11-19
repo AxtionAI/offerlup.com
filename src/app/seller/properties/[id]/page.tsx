@@ -7,6 +7,7 @@ import { StatusPill } from "@/components/StatusPill";
 import { formatCurrency } from "@/lib/offer";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { photoCategoryOptions } from "@/lib/validation";
+import { PropertyEnrichmentPanel } from "@/components/PropertyEnrichmentPanel";
 
 const STEPS = [
   "SUBMITTED",
@@ -26,7 +27,7 @@ export default async function SellerPropertyDetail({ params }: { params: Promise
 
   const property = await prisma.property.findUnique({
     where: { id },
-    include: { photos: { orderBy: { sortOrder: "asc" } }, bids: true },
+    include: { photos: { orderBy: { sortOrder: "asc" } }, bids: true, seller: true, enrichment: true },
   });
   if (!property || property.sellerId !== session.userId) notFound();
 
@@ -115,6 +116,26 @@ export default async function SellerPropertyDetail({ params }: { params: Promise
               <Stat label="Year Built" value={property.yearBuilt ? String(property.yearBuilt) : "—"} />
             </dl>
           </div>
+
+          <PropertyEnrichmentPanel
+            enrichment={
+              property.enrichment
+                ? {
+                    status: property.enrichment.status,
+                    errorMessage: property.enrichment.errorMessage,
+                    fetchedAt: property.enrichment.fetchedAt.toISOString(),
+                    data: property.enrichment.data as never,
+                  }
+                : null
+            }
+            sellerFullName={property.seller.fullName}
+            submitted={{
+              yearBuilt: property.yearBuilt,
+              squareFeet: property.squareFeet,
+              bedrooms: property.bedrooms,
+              bathrooms: property.bathrooms,
+            }}
+          />
 
           {property.status === "AUCTION_LIVE" && (
             <div className="rounded-2xl border border-brand-100 bg-brand-50 p-6">

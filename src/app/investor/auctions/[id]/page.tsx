@@ -4,6 +4,7 @@ import { useEffect, useState, use as usePromise } from "react";
 import Link from "next/link";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { StatusPill } from "@/components/StatusPill";
+import { PropertyEnrichmentPanel, type PropertyEnrichmentData } from "@/components/PropertyEnrichmentPanel";
 
 function money(n: number | null | undefined) {
   if (n === null || n === undefined) return "—";
@@ -22,12 +23,15 @@ type PropertyDetail = {
   bedrooms: number;
   bathrooms: number;
   squareFeet: number;
+  yearBuilt: number | null;
   status: string;
   startingBid: number | null;
   minBidIncrement: number;
   auctionEndsAt: string | null;
   winningBidAmount: number | null;
   awardedInvestorId: string | null;
+  seller: { fullName: string };
+  enrichment: PropertyEnrichmentData | null;
   photos: { url: string }[];
   bids: Bid[];
 };
@@ -127,6 +131,17 @@ export default function AuctionRoomPage({ params }: { params: Promise<{ id: stri
               <div><dt className="text-xs text-ink-500">Square Feet</dt><dd className="font-semibold text-ink-900">{property.squareFeet.toLocaleString()}</dd></div>
             </dl>
           </div>
+
+          <PropertyEnrichmentPanel
+            enrichment={property.enrichment}
+            sellerFullName=""
+            submitted={{
+              yearBuilt: property.yearBuilt,
+              squareFeet: property.squareFeet,
+              bedrooms: property.bedrooms,
+              bathrooms: property.bathrooms,
+            }}
+          />
 
           <div className="rounded-2xl border border-ink-100 bg-white p-6">
             <h2 className="font-bold text-ink-900">Bid History</h2>
